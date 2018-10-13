@@ -1,5 +1,5 @@
 # Safebet .NET Solution
-Football matches Web API project with ASP.NET Core
+Safebet .NET Web API Solution
 
 ## Installation
 1. Navigate to the Web API project
