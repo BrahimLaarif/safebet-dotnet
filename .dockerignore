@@ -1,0 +1,16 @@
+logs
+*.log
+
+.git/
+.gitignore
+README.md
+LICENSE
+
+Dockerfile*
+docker-compose*
+.dockerignore
+
+.vscode/
+
+bin\
+obj\
