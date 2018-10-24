@@ -9,7 +9,7 @@ using Safebet.WebAPI.Data;
 namespace Safebet.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181024030641_InitialModel")]
+    [Migration("20181024061219_InitialModel")]
     partial class InitialModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,8 @@ namespace Safebet.WebAPI.Migrations
                     b.Property<string>("LastTimePointHash");
 
                     b.Property<bool>("Processed");
+
+                    b.Property<string>("Result");
 
                     b.Property<DateTime>("StartDate");
 

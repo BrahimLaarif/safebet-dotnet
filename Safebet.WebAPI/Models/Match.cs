@@ -23,10 +23,12 @@ namespace Safebet.WebAPI.Models
         public string AwayTeam { get; set; }
 
         public ICollection<TimePoint> TimePoints { get; set; }
-        
+
         public string LastTimePointHash { get; set; }
 
         public bool Processed { get; set; }
+
+        public string Result { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
