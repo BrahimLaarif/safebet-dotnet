@@ -12,15 +12,12 @@ namespace Safebet.WebAPI.Models
         public string Hash { get; set; }
 
         [Required]
-        public string Event { get; set; }
+        public string EventName { get; set; }
 
         public DateTime StartDate { get; set; }
 
         [Required]
-        public string HomeTeam { get; set; }
-
-        [Required]
-        public string AwayTeam { get; set; }
+        public string Name { get; set; }
 
         public ICollection<TimePoint> TimePoints { get; set; }
 

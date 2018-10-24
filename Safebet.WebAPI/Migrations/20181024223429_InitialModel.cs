@@ -15,10 +15,9 @@ namespace Safebet.WebAPI.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Hash = table.Column<string>(nullable: true),
-                    Event = table.Column<string>(nullable: false),
+                    EventName = table.Column<string>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
-                    HomeTeam = table.Column<string>(nullable: false),
-                    AwayTeam = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     LastTimePointHash = table.Column<string>(nullable: true),
                     Processed = table.Column<bool>(nullable: false),
                     Result = table.Column<string>(nullable: true),
