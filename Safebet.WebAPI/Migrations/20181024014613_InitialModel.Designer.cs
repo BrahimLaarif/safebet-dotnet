@@ -9,7 +9,7 @@ using Safebet.WebAPI.Data;
 namespace Safebet.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181013041937_InitialModel")]
+    [Migration("20181024014613_InitialModel")]
     partial class InitialModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,8 @@ namespace Safebet.WebAPI.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<bool>("Processed");
 
                     b.Property<DateTime>("StartDate");
 

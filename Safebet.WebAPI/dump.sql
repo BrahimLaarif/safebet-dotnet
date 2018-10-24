@@ -11,6 +11,7 @@ CREATE TABLE `Matches` (
     `Name` longtext NOT NULL,
     `StartDate` datetime(6) NOT NULL,
     `LastTimePointHash` longtext NULL,
+    `Processed` bit NOT NULL,
     `CreatedDate` datetime(6) NOT NULL,
     `LastModifiedDate` datetime(6) NOT NULL,
     CONSTRAINT `PK_Matches` PRIMARY KEY (`Id`)
@@ -31,5 +32,5 @@ CREATE TABLE `TimePoints` (
 CREATE INDEX `IX_TimePoints_MatchId` ON `TimePoints` (`MatchId`);
 
 INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
-VALUES ('20181013041937_InitialModel', '2.1.1-rtm-30846');
+VALUES ('20181024014613_InitialModel', '2.1.1-rtm-30846');
 

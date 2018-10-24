@@ -21,6 +21,9 @@ namespace Safebet.WebAPI.Models
 
         public ICollection<TimePoint> TimePoints { get; set; }
         public string LastTimePointHash { get; set; }
+
+        public bool Processed { get; set; }
+
         public DateTime CreatedDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
 

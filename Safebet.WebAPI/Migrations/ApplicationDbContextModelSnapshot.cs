@@ -36,6 +36,8 @@ namespace Safebet.WebAPI.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<bool>("Processed");
+
                     b.Property<DateTime>("StartDate");
 
                     b.HasKey("Id");

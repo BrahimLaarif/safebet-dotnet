@@ -19,6 +19,7 @@ namespace Safebet.WebAPI.Migrations
                     Name = table.Column<string>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
                     LastTimePointHash = table.Column<string>(nullable: true),
+                    Processed = table.Column<bool>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     LastModifiedDate = table.Column<DateTime>(nullable: false)
                 },
