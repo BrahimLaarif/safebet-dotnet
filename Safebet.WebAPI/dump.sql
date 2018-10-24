@@ -8,8 +8,9 @@ CREATE TABLE `Matches` (
     `Id` int NOT NULL AUTO_INCREMENT,
     `Hash` longtext NULL,
     `Event` longtext NOT NULL,
-    `Name` longtext NOT NULL,
     `StartDate` datetime(6) NOT NULL,
+    `HomeTeam` longtext NOT NULL,
+    `AwayTeam` longtext NOT NULL,
     `LastTimePointHash` longtext NULL,
     `Processed` bit NOT NULL,
     `CreatedDate` datetime(6) NOT NULL,
@@ -32,5 +33,5 @@ CREATE TABLE `TimePoints` (
 CREATE INDEX `IX_TimePoints_MatchId` ON `TimePoints` (`MatchId`);
 
 INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
-VALUES ('20181024014613_InitialModel', '2.1.1-rtm-30846');
+VALUES ('20181024030641_InitialModel', '2.1.1-rtm-30846');
 

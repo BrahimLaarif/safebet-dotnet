@@ -22,6 +22,9 @@ namespace Safebet.WebAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AwayTeam")
+                        .IsRequired();
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("Event")
@@ -29,12 +32,12 @@ namespace Safebet.WebAPI.Migrations
 
                     b.Property<string>("Hash");
 
+                    b.Property<string>("HomeTeam")
+                        .IsRequired();
+
                     b.Property<DateTime>("LastModifiedDate");
 
                     b.Property<string>("LastTimePointHash");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
 
                     b.Property<bool>("Processed");
 

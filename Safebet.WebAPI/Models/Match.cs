@@ -14,10 +14,13 @@ namespace Safebet.WebAPI.Models
         [Required]
         public string Event { get; set; }
 
-        [Required]
-        public string Name { get; set; }
-        
         public DateTime StartDate { get; set; }
+
+        [Required]
+        public string HomeTeam { get; set; }
+
+        [Required]
+        public string AwayTeam { get; set; }
 
         public ICollection<TimePoint> TimePoints { get; set; }
         public string LastTimePointHash { get; set; }
