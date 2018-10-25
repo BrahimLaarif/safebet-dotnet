@@ -47,6 +47,79 @@ namespace Safebet.WebAPI.Migrations
                     b.ToTable("Matches");
                 });
 
+            modelBuilder.Entity("Safebet.WebAPI.Models.Prediction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("A1");
+
+                    b.Property<double>("A2");
+
+                    b.Property<double>("A3");
+
+                    b.Property<double>("A4");
+
+                    b.Property<double>("A5");
+
+                    b.Property<double>("AwayDropIndex");
+
+                    b.Property<double>("AwayMovementIndex");
+
+                    b.Property<double>("AwayOdds");
+
+                    b.Property<double>("AwayOddsGain");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<double>("D1");
+
+                    b.Property<double>("D2");
+
+                    b.Property<double>("D3");
+
+                    b.Property<double>("D4");
+
+                    b.Property<double>("D5");
+
+                    b.Property<double>("DrawDropIndex");
+
+                    b.Property<double>("DrawMovementIndex");
+
+                    b.Property<double>("DrawOdds");
+
+                    b.Property<double>("DrawOddsGain");
+
+                    b.Property<string>("FavoriteResult")
+                        .IsRequired();
+
+                    b.Property<double>("H1");
+
+                    b.Property<double>("H2");
+
+                    b.Property<double>("H3");
+
+                    b.Property<double>("H4");
+
+                    b.Property<double>("H5");
+
+                    b.Property<double>("HomeDropIndex");
+
+                    b.Property<double>("HomeMovementIndex");
+
+                    b.Property<double>("HomeOdds");
+
+                    b.Property<double>("HomeOddsGain");
+
+                    b.Property<int?>("MatchId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId");
+
+                    b.ToTable("Predictions");
+                });
+
             modelBuilder.Entity("Safebet.WebAPI.Models.TimePoint", b =>
                 {
                     b.Property<int>("Id")
@@ -69,6 +142,13 @@ namespace Safebet.WebAPI.Migrations
                     b.HasIndex("MatchId");
 
                     b.ToTable("TimePoints");
+                });
+
+            modelBuilder.Entity("Safebet.WebAPI.Models.Prediction", b =>
+                {
+                    b.HasOne("Safebet.WebAPI.Models.Match")
+                        .WithMany("Predictions")
+                        .HasForeignKey("MatchId");
                 });
 
             modelBuilder.Entity("Safebet.WebAPI.Models.TimePoint", b =>

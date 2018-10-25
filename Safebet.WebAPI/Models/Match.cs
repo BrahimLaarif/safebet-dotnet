@@ -23,6 +23,8 @@ namespace Safebet.WebAPI.Models
 
         public string LastTimePointHash { get; set; }
 
+        public ICollection<Prediction> Predictions { get; set; }
+
         public bool Processed { get; set; }
 
         public string Result { get; set; }
@@ -33,6 +35,7 @@ namespace Safebet.WebAPI.Models
         public Match()
         {
             TimePoints = new Collection<TimePoint>();
+            Predictions = new Collection<Prediction>();
             CreatedDate = DateTime.Now;
             LastModifiedDate = DateTime.Now;
         }

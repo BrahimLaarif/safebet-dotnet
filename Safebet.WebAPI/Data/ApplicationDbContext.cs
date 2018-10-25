@@ -7,6 +7,7 @@ namespace Safebet.WebAPI.Data
     {
         public DbSet<Match> Matches { get; set; }
         public DbSet<TimePoint> TimePoints { get; set; }
+        public DbSet<Prediction> Predictions { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base (options)
