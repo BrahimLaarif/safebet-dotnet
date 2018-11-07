@@ -39,3 +39,6 @@ dotnet ef migrations script --output dump.sql
 - GET /api/matches/gemstone/grandidierite,diamond,ruby?date=2018-11-07
 - GET /api/matches/gemstone/group/by/date
 - GET /api/matches/gemstone/group/by/eventName
+- GET /api/gemstones/statistics
+- GET /api/gemstones/statistics/grandidierite
+- GET /api/gemstones/statistics/grandidierite,diamond,ruby
