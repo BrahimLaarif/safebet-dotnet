@@ -27,3 +27,15 @@ Generate the SQL script based on the entire migration script to update the produ
 ```console
 dotnet ef migrations script --output dump.sql
 ```
+
+## Endpoints
+- GET /api/matches
+- GET /api/matches?date=2018-11-07
+- GET /api/matches/1
+- GET /api/matches/gemstone
+- GET /api/matches/gemstone?date=2018-11-07
+- GET /api/matches/gemstone/grandidierite
+- GET /api/matches/gemstone/grandidierite,diamond,ruby
+- GET /api/matches/gemstone/grandidierite,diamond,ruby?date=2018-11-07
+- GET /api/matches/gemstone/group/by/date
+- GET /api/matches/gemstone/group/by/eventName
