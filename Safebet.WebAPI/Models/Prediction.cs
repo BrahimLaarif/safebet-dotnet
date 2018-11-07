@@ -7,46 +7,74 @@ namespace Safebet.WebAPI.Models
     {
         public int Id { get; set; }
 
-        public double HomeOdds { get; set; }
-        public double DrawOdds { get; set; }
-        public double AwayOdds { get; set; }
+        public int MatchId { get; set; }
+
+        public float HomeOdds { get; set; }
+        public float DrawOdds { get; set; }
+        public float AwayOdds { get; set; }
 
         [Required]
         public string FavoriteResult { get; set; }
 
-        public double HomeOddsGain { get; set; }
-        public double DrawOddsGain { get; set; }
-        public double AwayOddsGain { get; set; }
+        public float HomeOddsGain { get; set; }
+        public float DrawOddsGain { get; set; }
+        public float AwayOddsGain { get; set; }
 
-        public double H1 { get; set; }
-        public double H2 { get; set; }
-        public double H3 { get; set; }
-        public double H4 { get; set; }
-        public double H5 { get; set; }
-        public double D1 { get; set; }
-        public double D2 { get; set; }
-        public double D3 { get; set; }
-        public double D4 { get; set; }
-        public double D5 { get; set; }
-        public double A1 { get; set; }
-        public double A2 { get; set; }
-        public double A3 { get; set; }
-        public double A4 { get; set; }
-        public double A5 { get; set; }
+        public float H1 { get; set; }
+        public float H2 { get; set; }
+        public float H3 { get; set; }
+        public float H4 { get; set; }
+        public float H5 { get; set; }
+        public float D1 { get; set; }
+        public float D2 { get; set; }
+        public float D3 { get; set; }
+        public float D4 { get; set; }
+        public float D5 { get; set; }
+        public float A1 { get; set; }
+        public float A2 { get; set; }
+        public float A3 { get; set; }
+        public float A4 { get; set; }
+        public float A5 { get; set; }
 
-        public double HomeDropIndex { get; set; }
-        public double DrawDropIndex { get; set; }
-        public double AwayDropIndex { get; set; }
+        public float HomeDropIndex { get; set; }
+        public float DrawDropIndex { get; set; }
+        public float AwayDropIndex { get; set; }
 
-        public double HomeMovementIndex { get; set; }
-        public double DrawMovementIndex { get; set; }
-        public double AwayMovementIndex { get; set; }
+        public float HomeMovementIndex { get; set; }
+        public float DrawMovementIndex { get; set; }
+        public float AwayMovementIndex { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        [Required]
+        public string PredictedResult { get; set; }
+        public float PredictedHomeProba { get; set; }
+        public float PredictedDrawProba { get; set; }
+        public float PredictedAwayProba { get; set; }
+        public float PredictedResultProba { get; set; }
+        public float PredictedResultOdds { get; set; }
+
+        public int AccuratePrediction { get; set; }
+        public int BalancedOdds { get; set; }
+        public int HomeAdvantage { get; set; }
+        public int PredictedResultProbaIsSafe { get; set; }
+        public int PredictedResultOddsIsSafe { get; set; }
+        public int PredictedResultGainsAndDropsIsGoingDown { get; set; }
+        public int OtherResultsGainsAndDropsIsGoingUp { get; set; }
+        public int PredictedResultGraphIsChaotic { get; set; }
+        public int PredictedResultGraphIsGoingDown { get; set; }
+        public int PredictedResultGraphTailIsGoingDown { get; set; }
+
+        public int PredictedSafetyLevel { get; set; }
+        public float PredictedUnsafeMatchProba { get; set; }
+        public float PredictedSafeMatchProba { get; set; }
+        public float PredictedSafetyLevelProba { get; set; }
+
+        public string Gemstone { get; set; }
+
+        public DateTime CreationDate { get; set; }
 
         public Prediction()
         {
-            CreatedDate = DateTime.Now;
+            CreationDate = DateTime.Now;
         }
     }
 }

@@ -19,25 +19,24 @@ namespace Safebet.WebAPI.Models
         [Required]
         public string Name { get; set; }
 
-        public ICollection<TimePoint> TimePoints { get; set; }
-
+        public virtual ICollection<TimePoint> TimePoints { get; set; }
         public string LastTimePointHash { get; set; }
 
-        public ICollection<Prediction> Predictions { get; set; }
+        public virtual ICollection<Prediction> Predictions { get; set; }
+        public int? LastPredictionId { get; set; }
+        public virtual Prediction LastPrediction { get; set; }
 
         public bool Processed { get; set; }
-
+        
         public string Result { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-        public DateTime LastModifiedDate { get; set; }
+        public DateTime CreationDate { get; set; }
 
         public Match()
         {
             TimePoints = new Collection<TimePoint>();
             Predictions = new Collection<Prediction>();
-            CreatedDate = DateTime.Now;
-            LastModifiedDate = DateTime.Now;
+            CreationDate = DateTime.Now;
         }
     }
 }
