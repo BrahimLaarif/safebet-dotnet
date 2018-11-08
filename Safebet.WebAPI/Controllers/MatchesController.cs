@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Safebet.WebAPI.Data;
 using Safebet.WebAPI.Extensions;
 using Safebet.WebAPI.Models;
+using Safebet.WebAPI.Resources;
 using Safebet.WebAPI.Utilities;
 
 namespace Safebet.WebAPI.Controllers
@@ -17,10 +18,12 @@ namespace Safebet.WebAPI.Controllers
     public class MatchesController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public MatchesController(ApplicationDbContext context)
+        public MatchesController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -28,12 +31,19 @@ namespace Safebet.WebAPI.Controllers
         {
             var matches = await context.Matches
                 .Include(m => m.LastPrediction)
+                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
+                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
                 .Where(m => !filter.Date.HasValue || m.StartDate.Date.Equals(filter.Date))
-                .OrderBy(m => m.Id)
+                .Where(m => !filter.StartDate.HasValue || m.StartDate.Date >= filter.StartDate)
+                .Where(m => !filter.EndDate.HasValue || m.StartDate.Date <= filter.EndDate)
+                .OrderBy(m => m.StartDate.Date)
+                .ThenBy(m => m.EventName)
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
 
-            return Ok(matches);
+            var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}", Name = nameof(GetMatch))]
@@ -53,78 +63,59 @@ namespace Safebet.WebAPI.Controllers
             return Ok(match);
         }
 
+        [HttpGet("today", Name = nameof(GetTodayMatches))]
+        public async Task<IActionResult> GetTodayMatches([FromQuery] TodayMatchFilter filter)
+        {
+            var matches = await context.Matches
+                .Include(m => m.LastPrediction)
+                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
+                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
+                .Where(m => m.StartDate.Date.Equals(DateTime.Now.Date))
+                .OrderBy(m => m.EventName)
+                .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
+                .ToListAsync();
+
+            return Ok(matches);
+        }
+
         [HttpGet("gemstone", Name = nameof(GetMatchesWithGemstone))]
         public async Task<IActionResult> GetMatchesWithGemstone([FromQuery] MatchFilter filter)
         {
             var matches = await context.Matches
                 .Include(m => m.LastPrediction)
-                .Where(m => !filter.Date.HasValue || m.StartDate.Date.Equals(filter.Date))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
                 .Where(m => m.LastPrediction.Gemstone != null)
-                .OrderBy(m => m.Id)
+                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
+                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
+                .Where(m => !filter.Date.HasValue || m.StartDate.Date.Equals(filter.Date))
+                .Where(m => !filter.StartDate.HasValue || m.StartDate.Date >= filter.StartDate)
+                .Where(m => !filter.EndDate.HasValue || m.StartDate.Date <= filter.EndDate)
+                .OrderBy(m => m.StartDate.Date)
+                .ThenBy(m => m.EventName)
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
-            
+
             return Ok(matches);
         }
 
-        [HttpGet("gemstone/{gemstonesQuery}", Name = nameof(GetMatchesWithGemstoneByGemstones))]
-        public async Task<IActionResult> GetMatchesWithGemstoneByGemstones(string gemstonesQuery, [FromQuery] MatchFilter filter)
+        [HttpGet("gemstone/{gemstonesString}", Name = nameof(GetMatchesWithGemstoneByGemstones))]
+        public async Task<IActionResult> GetMatchesWithGemstoneByGemstones(string gemstonesString, [FromQuery] MatchFilter filter)
         {
-            var gemstones = gemstonesQuery.Split(",").ToList();
+            var gemstones = gemstonesString.Split(",").ToList();
 
             var matches = await context.Matches
                 .Include(m => m.LastPrediction)
-                .Where(m => !filter.Date.HasValue || m.StartDate.Date.Equals(filter.Date))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
                 .Where(m => gemstones.Contains(m.LastPrediction.Gemstone))
-                .OrderBy(m => m.Id)
+                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
+                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
+                .Where(m => !filter.Date.HasValue || m.StartDate.Date.Equals(filter.Date))
+                .Where(m => !filter.StartDate.HasValue || m.StartDate.Date >= filter.StartDate)
+                .Where(m => !filter.EndDate.HasValue || m.StartDate.Date <= filter.EndDate)
+                .OrderBy(m => m.StartDate.Date)
+                .ThenBy(m => m.EventName)
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
 
             return Ok(matches);
-        }
-
-        [HttpGet("gemstone/group/by/date", Name = nameof(GetMatchesWithGemstoneGroupByDate))]
-        public async Task<IActionResult> GetMatchesWithGemstoneGroupByDate([FromQuery] GroupFilter filter)
-        {
-            var groups = await context.Matches
-                .Include(m => m.LastPrediction)
-                .Where(m => m.LastPrediction.Gemstone != null)
-                .GroupBy(m => m.StartDate.Date)
-                .OrderBy(g => g.Key)
-                .Select(g => new DateGroup() 
-                    {
-                        Date = g.Key,
-                        Count = g.Count(),
-                        Matches = g.OrderBy(m => m.Id).Take(10).ToList()
-                    }
-                )
-                .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
-                .ToListAsync();
-            
-            return Ok(groups);
-        }
-
-        [HttpGet("gemstone/group/by/eventName", Name = nameof(GetMatchesWithGemstoneGroupByEventName))]
-        public async Task<IActionResult> GetMatchesWithGemstoneGroupByEventName([FromQuery] GroupFilter filter)
-        {
-            var groups = await context.Matches
-                .Include(m => m.LastPrediction)
-                .Where(m => m.LastPrediction.Gemstone != null)
-                .GroupBy(m => m.EventName)
-                .OrderBy(g => g.Key)
-                .Select(g => new EventNameGroup() 
-                    {
-                        EventName = g.Key,
-                        Count = g.Count(),
-                        Matches = g.OrderBy(m => m.Id).Take(10).ToList()
-                    }
-                )
-                .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
-                .ToListAsync();
-            
-            return Ok(groups);
         }
     }
 }

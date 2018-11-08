@@ -31,7 +31,7 @@ namespace Safebet.WebAPI.Controllers
                 .Include(m => m.LastPrediction)
                 .Where(m => m.LastPrediction.Gemstone != null)
                 .Where(m => m.Result != null)
-                .OrderBy(m => m.Id)
+                .OrderBy(m => m.StartDate.Date)
                 .ToListAsync();
 
             var gemstonesStatistics = new GemstonesStatisticsBuilder(matches).BuildGemstonesStatistics(gemstones);
@@ -39,16 +39,16 @@ namespace Safebet.WebAPI.Controllers
             return Ok(gemstonesStatistics);
         }
 
-        [HttpGet("{gemstonesQuery}", Name = nameof(GetGemstoneStatisticsByGemstones))]
-        public async Task<IActionResult> GetGemstoneStatisticsByGemstones(string gemstonesQuery)
+        [HttpGet("{gemstonesString}", Name = nameof(GetGemstoneStatisticsByGemstones))]
+        public async Task<IActionResult> GetGemstoneStatisticsByGemstones(string gemstonesString)
         {
-            var gemstones = gemstonesQuery.Split(",").ToList();
+            var gemstones = gemstonesString.Split(",").ToList();
 
             var matches = await context.Matches
                 .Include(m => m.LastPrediction)
                 .Where(m => m.LastPrediction.Gemstone != null)
                 .Where(m => m.Result != null)
-                .OrderBy(m => m.Id)
+                .OrderBy(m => m.StartDate.Date)
                 .ToListAsync();
 
             var gemstoneStatistics = new GemstonesStatisticsBuilder(matches).BuildGemstoneStatistics(gemstones);
