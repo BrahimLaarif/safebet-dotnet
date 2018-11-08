@@ -52,7 +52,6 @@ namespace Safebet.WebAPI.Controllers
             var match = await context.Matches
                 .Include(m => m.TimePoints)
                 .Include(m => m.Predictions)
-                .Include(m => m.LastPrediction)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             if (match == null)
@@ -60,7 +59,9 @@ namespace Safebet.WebAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(match);
+            var result = mapper.Map<Match, DetailsMatchResource>(match);
+
+            return Ok(result);
         }
 
         [HttpGet("today", Name = nameof(GetTodayMatches))]
@@ -77,7 +78,7 @@ namespace Safebet.WebAPI.Controllers
             
             var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
 
-            return Ok(matches);
+            return Ok(result);
         }
 
         [HttpGet("gemstone", Name = nameof(GetMatchesWithGemstone))]
@@ -98,7 +99,7 @@ namespace Safebet.WebAPI.Controllers
             
             var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
 
-            return Ok(matches);
+            return Ok(result);
         }
 
         [HttpGet("gemstone/{gemstonesString}", Name = nameof(GetMatchesWithGemstoneByGemstones))]
@@ -121,7 +122,7 @@ namespace Safebet.WebAPI.Controllers
             
             var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
 
-            return Ok(matches);
+            return Ok(result);
         }
     }
 }

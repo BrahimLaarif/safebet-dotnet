@@ -10,6 +10,7 @@ namespace Safebet.WebAPI.Mapping
         public AutoMapperProfile()
         {
             CreateMap<Match, CardMatchResource>();
+            CreateMap<Match, DetailsMatchResource>();
         }
     }
 }
