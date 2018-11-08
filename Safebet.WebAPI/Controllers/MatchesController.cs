@@ -74,6 +74,8 @@ namespace Safebet.WebAPI.Controllers
                 .OrderBy(m => m.EventName)
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
+            
+            var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
 
             return Ok(matches);
         }
@@ -93,6 +95,8 @@ namespace Safebet.WebAPI.Controllers
                 .ThenBy(m => m.EventName)
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
+            
+            var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
 
             return Ok(matches);
         }
@@ -114,6 +118,8 @@ namespace Safebet.WebAPI.Controllers
                 .ThenBy(m => m.EventName)
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
+            
+            var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
 
             return Ok(matches);
         }
