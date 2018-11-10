@@ -81,17 +81,15 @@ namespace Safebet.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("gemstone", Name = nameof(GetMatchesWithGemstone))]
-        public async Task<IActionResult> GetMatchesWithGemstone([FromQuery] MatchFilter filter)
+        [HttpGet("today/gemstone", Name = nameof(GetTodayMatchesWithGemstone))]
+        public async Task<IActionResult> GetTodayMatchesWithGemstone([FromQuery] TodayMatchFilter filter)
         {
             var matches = await context.Matches
                 .Include(m => m.LastPrediction)
                 .Where(m => m.LastPrediction.Gemstone != null)
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
                 .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
-                .Where(m => !filter.Date.HasValue || m.StartDate.Date.Equals(filter.Date))
-                .Where(m => !filter.StartDate.HasValue || m.StartDate.Date >= filter.StartDate)
-                .Where(m => !filter.EndDate.HasValue || m.StartDate.Date <= filter.EndDate)
+                .Where(m => m.StartDate.Date.Equals(DateTime.Now.Date))
                 .OrderBy(m => m.StartDate.Date)
                 .ThenBy(m => m.EventName)
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
@@ -102,8 +100,8 @@ namespace Safebet.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("gemstone/{gemstonesString}", Name = nameof(GetMatchesWithGemstoneByGemstones))]
-        public async Task<IActionResult> GetMatchesWithGemstoneByGemstones(string gemstonesString, [FromQuery] MatchFilter filter)
+        [HttpGet("today/gemstone/{gemstonesString}", Name = nameof(GetTodayMatchesWithGemstoneByGemstones))]
+        public async Task<IActionResult> GetTodayMatchesWithGemstoneByGemstones(string gemstonesString, [FromQuery] TodayMatchFilter filter)
         {
             var gemstones = gemstonesString.Split(",").ToList();
 
@@ -112,9 +110,7 @@ namespace Safebet.WebAPI.Controllers
                 .Where(m => gemstones.Contains(m.LastPrediction.Gemstone))
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
                 .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
-                .Where(m => !filter.Date.HasValue || m.StartDate.Date.Equals(filter.Date))
-                .Where(m => !filter.StartDate.HasValue || m.StartDate.Date >= filter.StartDate)
-                .Where(m => !filter.EndDate.HasValue || m.StartDate.Date <= filter.EndDate)
+                .Where(m => m.StartDate.Date.Equals(DateTime.Now.Date))
                 .OrderBy(m => m.StartDate.Date)
                 .ThenBy(m => m.EventName)
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)

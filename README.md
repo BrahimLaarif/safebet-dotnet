@@ -33,12 +33,12 @@ dotnet ef migrations script --output dump.sql
 - GET /api/matches?date=2018-11-07
 - GET /api/matches/1
 - GET /api/matches/today
-- GET /api/matches/today?name=Real Madrid
-- GET /api/matches/gemstone
-- GET /api/matches/gemstone?date=2018-11-07
-- GET /api/matches/gemstone/grandidierite
-- GET /api/matches/gemstone/grandidierite,diamond,ruby
-- GET /api/matches/gemstone/grandidierite,diamond,ruby?date=2018-11-07
+- GET /api/matches/today?date=2018-11-07
+- GET /api/matches/today/gemstone
+- GET /api/matches/today/gemstone?date=2018-11-07
+- GET /api/matches/today/gemstone/grandidierite
+- GET /api/matches/today/gemstone/grandidierite,diamond,ruby
+- GET /api/matches/today/gemstone/grandidierite,diamond,ruby?date=2018-11-07
 - GET /api/gemstones/statistics
 - GET /api/gemstones/statistics/grandidierite
 - GET /api/gemstones/statistics/grandidierite,diamond,ruby
