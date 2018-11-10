@@ -10,6 +10,7 @@ namespace Safebet.WebAPI.Resources
         public DateTime StartDate { get; set; }
         public string Name { get; set; }
         public string Result { get; set; }
+        public DateTime CreationDate { get; set; }
         public Prediction LastPrediction { get; set; }
     }
 }
