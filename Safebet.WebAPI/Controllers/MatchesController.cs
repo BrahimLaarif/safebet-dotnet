@@ -41,7 +41,7 @@ namespace Safebet.WebAPI.Controllers
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
 
-            var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
+            var result = mapper.Map<List<Match>, IEnumerable<ListItemMatchResource>>(matches);
 
             return Ok(result);
         }
@@ -59,7 +59,7 @@ namespace Safebet.WebAPI.Controllers
                 return NotFound();
             }
 
-            var result = mapper.Map<Match, DetailsMatchResource>(match);
+            var result = mapper.Map<Match, DetailMatchResource>(match);
 
             return Ok(result);
         }
@@ -76,7 +76,7 @@ namespace Safebet.WebAPI.Controllers
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
             
-            var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
+            var result = mapper.Map<List<Match>, IEnumerable<ListItemMatchResource>>(matches);
 
             return Ok(result);
         }
@@ -95,7 +95,7 @@ namespace Safebet.WebAPI.Controllers
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
             
-            var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
+            var result = mapper.Map<List<Match>, IEnumerable<ListItemMatchResource>>(matches);
 
             return Ok(result);
         }
@@ -116,7 +116,7 @@ namespace Safebet.WebAPI.Controllers
                 .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
                 .ToListAsync();
             
-            var result = mapper.Map<List<Match>, IEnumerable<CardMatchResource>>(matches);
+            var result = mapper.Map<List<Match>, IEnumerable<ListItemMatchResource>>(matches);
 
             return Ok(result);
         }
