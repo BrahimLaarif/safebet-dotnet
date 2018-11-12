@@ -51,6 +51,9 @@ namespace Safebet.WebAPI.Models
         public float PredictedAwayProba { get; set; }
         public float PredictedResultProba { get; set; }
         public float PredictedResultOdds { get; set; }
+        public float PredictedResultOddsGain { get; set; }
+        public float PredictedResultDropIndex { get; set; }
+        public float PredictedResultMovementIndex { get; set; }
 
         public int AccuratePrediction { get; set; }
         public int BalancedOdds { get; set; }
@@ -64,8 +67,8 @@ namespace Safebet.WebAPI.Models
         public int PredictedResultGraphTailIsGoingDown { get; set; }
 
         public int PredictedSafetyLevel { get; set; }
-        public float PredictedUnsafeMatchProba { get; set; }
-        public float PredictedSafeMatchProba { get; set; }
+        public float PredictedUnsafeProba { get; set; }
+        public float PredictedSafeProba { get; set; }
         public float PredictedSafetyLevelProba { get; set; }
 
         public string Gemstone { get; set; }
