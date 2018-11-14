@@ -17,6 +17,6 @@ FROM microsoft/dotnet:aspnetcore-runtime AS runtime
 WORKDIR /app
 
 # Copy output to the work directory
-COPY --from=build /app/out .
+COPY --from=build /app/out ./
 
 ENTRYPOINT ["dotnet", "Safebet.WebAPI.dll"]
