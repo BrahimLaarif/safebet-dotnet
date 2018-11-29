@@ -52,8 +52,21 @@ namespace Safebet.WebAPI.Controllers
             return Ok(groups);
         }
 
-        [HttpGet("view/{id}/{snapshot?}", Name = nameof(GetMatch))]
-        public async Task<IActionResult> GetMatch(int id, TimeSpan? snapshot)
+        [HttpGet("view/{id}", Name = nameof(GetMatch))]
+        public async Task<IActionResult> GetMatch(int id)
+        {
+            var match = await repository.GetMatch(id);
+
+            if (match == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(match);
+        }
+
+        [HttpGet("view/{id}/snapshot/{snapshot}", Name = nameof(GetMatchSnapshot))]
+        public async Task<IActionResult> GetMatchSnapshot(int id, TimeSpan snapshot)
         {
             var match = await repository.GetMatch(id, snapshot);
 

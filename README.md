@@ -34,6 +34,6 @@ dotnet ef migrations script --output dump.sql
 - GET /api/matches/period/2018-11-01/2018-11-30
 - GET /api/matches/upcoming
 - GET /api/matches/view/1
-- GET /api/matches/view/1/14:50:00
+- GET /api/matches/view/1/snapshot/14:50:00
 - GET /api/bettingHistory/2017-01-01/2018-12-31
 - GET /api/bettingHistory/2017-01-01/2018-12-31?gemstones=grandidierite,diamond,ruby
