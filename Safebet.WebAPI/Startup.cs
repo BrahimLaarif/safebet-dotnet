@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Safebet.WebAPI.Data;
+using Safebet.WebAPI.Data.Repositories;
 
 namespace Safebet.WebAPI
 {
@@ -30,6 +31,7 @@ namespace Safebet.WebAPI
         {
             services.AddCors();
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IApplicationRepository, ApplicationRepository>();
             services.AddAutoMapper();
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)

@@ -9,6 +9,26 @@ namespace Safebet.WebAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Matches",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Hash = table.Column<string>(nullable: true),
+                    EventName = table.Column<string>(nullable: false),
+                    KickoffDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    LastTimePointHash = table.Column<string>(nullable: true),
+                    Processed = table.Column<bool>(nullable: false),
+                    Result = table.Column<string>(nullable: true),
+                    CreationDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Matches", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Predictions",
                 columns: table => new
                 {
@@ -72,33 +92,12 @@ namespace Safebet.WebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Predictions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Matches",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Hash = table.Column<string>(nullable: true),
-                    EventName = table.Column<string>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    LastTimePointHash = table.Column<string>(nullable: true),
-                    LastPredictionId = table.Column<int>(nullable: true),
-                    Processed = table.Column<bool>(nullable: false),
-                    Result = table.Column<string>(nullable: true),
-                    CreationDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Matches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Matches_Predictions_LastPredictionId",
-                        column: x => x.LastPredictionId,
-                        principalTable: "Predictions",
+                        name: "FK_Predictions_Matches_MatchId",
+                        column: x => x.MatchId,
+                        principalTable: "Matches",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,11 +125,6 @@ namespace Safebet.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Matches_LastPredictionId",
-                table: "Matches",
-                column: "LastPredictionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Predictions_MatchId",
                 table: "Predictions",
                 column: "MatchId");
@@ -139,27 +133,15 @@ namespace Safebet.WebAPI.Migrations
                 name: "IX_TimePoints_MatchId",
                 table: "TimePoints",
                 column: "MatchId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Predictions_Matches_MatchId",
-                table: "Predictions",
-                column: "MatchId",
-                principalTable: "Matches",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Matches_Predictions_LastPredictionId",
-                table: "Matches");
+            migrationBuilder.DropTable(
+                name: "Predictions");
 
             migrationBuilder.DropTable(
                 name: "TimePoints");
-
-            migrationBuilder.DropTable(
-                name: "Predictions");
 
             migrationBuilder.DropTable(
                 name: "Matches");

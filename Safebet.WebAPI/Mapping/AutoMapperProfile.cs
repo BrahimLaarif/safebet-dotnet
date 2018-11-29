@@ -1,7 +1,6 @@
 using System.Linq;
 using AutoMapper;
 using Safebet.WebAPI.Models;
-using Safebet.WebAPI.Resources;
 
 namespace Safebet.WebAPI.Mapping
 {
@@ -9,8 +8,6 @@ namespace Safebet.WebAPI.Mapping
     {
         public AutoMapperProfile()
         {
-            CreateMap<Match, ListItemMatchResource>();
-            CreateMap<Match, DetailMatchResource>();
         }
     }
 }

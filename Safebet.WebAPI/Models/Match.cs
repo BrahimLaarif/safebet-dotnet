@@ -14,17 +14,12 @@ namespace Safebet.WebAPI.Models
         [Required]
         public string EventName { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime KickoffDate { get; set; }
 
         [Required]
         public string Name { get; set; }
 
-        public virtual ICollection<TimePoint> TimePoints { get; set; }
         public string LastTimePointHash { get; set; }
-
-        public virtual ICollection<Prediction> Predictions { get; set; }
-        public int? LastPredictionId { get; set; }
-        public virtual Prediction LastPrediction { get; set; }
 
         public bool Processed { get; set; }
         
@@ -32,11 +27,14 @@ namespace Safebet.WebAPI.Models
 
         public DateTime CreationDate { get; set; }
 
+        public virtual ICollection<TimePoint> TimePoints { get; set; }
+        public virtual ICollection<Prediction> Predictions { get; set; }
+
         public Match()
         {
+            CreationDate = DateTime.Now;
             TimePoints = new Collection<TimePoint>();
             Predictions = new Collection<Prediction>();
-            CreationDate = DateTime.Now;
         }
     }
 }

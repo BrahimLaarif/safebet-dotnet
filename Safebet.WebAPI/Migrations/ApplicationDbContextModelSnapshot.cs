@@ -29,7 +29,7 @@ namespace Safebet.WebAPI.Migrations
 
                     b.Property<string>("Hash");
 
-                    b.Property<int?>("LastPredictionId");
+                    b.Property<DateTime>("KickoffDate");
 
                     b.Property<string>("LastTimePointHash");
 
@@ -40,11 +40,7 @@ namespace Safebet.WebAPI.Migrations
 
                     b.Property<string>("Result");
 
-                    b.Property<DateTime>("StartDate");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("LastPredictionId");
 
                     b.ToTable("Matches");
                 });
@@ -193,13 +189,6 @@ namespace Safebet.WebAPI.Migrations
                     b.HasIndex("MatchId");
 
                     b.ToTable("TimePoints");
-                });
-
-            modelBuilder.Entity("Safebet.WebAPI.Models.Match", b =>
-                {
-                    b.HasOne("Safebet.WebAPI.Models.Prediction", "LastPrediction")
-                        .WithMany()
-                        .HasForeignKey("LastPredictionId");
                 });
 
             modelBuilder.Entity("Safebet.WebAPI.Models.Prediction", b =>

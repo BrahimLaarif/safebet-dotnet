@@ -4,6 +4,19 @@
     CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
 );
 
+CREATE TABLE `Matches` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Hash` longtext NULL,
+    `EventName` longtext NOT NULL,
+    `KickoffDate` datetime(6) NOT NULL,
+    `Name` longtext NOT NULL,
+    `LastTimePointHash` longtext NULL,
+    `Processed` bit NOT NULL,
+    `Result` longtext NULL,
+    `CreationDate` datetime(6) NOT NULL,
+    CONSTRAINT `PK_Matches` PRIMARY KEY (`Id`)
+);
+
 CREATE TABLE `Predictions` (
     `Id` int NOT NULL AUTO_INCREMENT,
     `MatchId` int NOT NULL,
@@ -60,22 +73,8 @@ CREATE TABLE `Predictions` (
     `PredictedSafetyLevelProba` float NOT NULL,
     `Gemstone` longtext NULL,
     `CreationDate` datetime(6) NOT NULL,
-    CONSTRAINT `PK_Predictions` PRIMARY KEY (`Id`)
-);
-
-CREATE TABLE `Matches` (
-    `Id` int NOT NULL AUTO_INCREMENT,
-    `Hash` longtext NULL,
-    `EventName` longtext NOT NULL,
-    `StartDate` datetime(6) NOT NULL,
-    `Name` longtext NOT NULL,
-    `LastTimePointHash` longtext NULL,
-    `LastPredictionId` int NULL,
-    `Processed` bit NOT NULL,
-    `Result` longtext NULL,
-    `CreationDate` datetime(6) NOT NULL,
-    CONSTRAINT `PK_Matches` PRIMARY KEY (`Id`),
-    CONSTRAINT `FK_Matches_Predictions_LastPredictionId` FOREIGN KEY (`LastPredictionId`) REFERENCES `Predictions` (`Id`) ON DELETE NO ACTION
+    CONSTRAINT `PK_Predictions` PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_Predictions_Matches_MatchId` FOREIGN KEY (`MatchId`) REFERENCES `Matches` (`Id`) ON DELETE CASCADE
 );
 
 CREATE TABLE `TimePoints` (
@@ -90,14 +89,10 @@ CREATE TABLE `TimePoints` (
     CONSTRAINT `FK_TimePoints_Matches_MatchId` FOREIGN KEY (`MatchId`) REFERENCES `Matches` (`Id`) ON DELETE CASCADE
 );
 
-CREATE INDEX `IX_Matches_LastPredictionId` ON `Matches` (`LastPredictionId`);
-
 CREATE INDEX `IX_Predictions_MatchId` ON `Predictions` (`MatchId`);
 
 CREATE INDEX `IX_TimePoints_MatchId` ON `TimePoints` (`MatchId`);
 
-ALTER TABLE `Predictions` ADD CONSTRAINT `FK_Predictions_Matches_MatchId` FOREIGN KEY (`MatchId`) REFERENCES `Matches` (`Id`) ON DELETE CASCADE;
-
 INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
-VALUES ('20181112131454_InitialModel', '2.1.1-rtm-30846');
+VALUES ('20181128225841_InitialModel', '2.1.1-rtm-30846');
 

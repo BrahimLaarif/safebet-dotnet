@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
-using Safebet.WebAPI.Models;
 
-namespace Safebet.WebAPI.Resources
+namespace Safebet.WebAPI.Models
 {
-    public class DetailMatchResource
+    public class DetailMatch
     {
         public int Id { get; set; }
         public string EventName { get; set; }
-        public DateTime StartDate { get; set; }
+        public DateTime KickoffDate { get; set; }
         public string Name { get; set; }
         public string Result { get; set; }
-        public DateTime CreationDate { get; set; }
         public ICollection<TimePoint> TimePoints { get; set; }
         public ICollection<Prediction> Predictions { get; set; }
-        public Prediction LastPrediction { get; set; }
+        public Prediction Prediction { get; set; }
     }
 }

@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Safebet.WebAPI.Data;
+using Safebet.WebAPI.Data.Repositories;
 using Safebet.WebAPI.Extensions;
 using Safebet.WebAPI.Models;
-using Safebet.WebAPI.Resources;
 using Safebet.WebAPI.Utilities;
 
 namespace Safebet.WebAPI.Controllers
@@ -17,108 +18,51 @@ namespace Safebet.WebAPI.Controllers
     [ApiController]
     public class MatchesController : ControllerBase
     {
-        private readonly ApplicationDbContext context;
-        private readonly IMapper mapper;
+        private readonly IApplicationRepository repository;
 
-        public MatchesController(ApplicationDbContext context, IMapper mapper)
+        public MatchesController(IApplicationRepository repository)
         {
-            this.context = context;
-            this.mapper = mapper;
+            this.repository = repository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetMatches([FromQuery] MatchFilter filter)
+        [HttpGet("date/{date}", Name = nameof(GetMatchesByDate))]
+        public async Task<IActionResult> GetMatchesByDate(DateTime date, [FromQuery] MatchFilter filter)
         {
-            var matches = await context.Matches
-                .Include(m => m.LastPrediction)
-                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
-                .Where(m => !filter.Date.HasValue || m.StartDate.Date.Equals(filter.Date))
-                .Where(m => !filter.StartDate.HasValue || m.StartDate.Date >= filter.StartDate)
-                .Where(m => !filter.EndDate.HasValue || m.StartDate.Date <= filter.EndDate)
-                .OrderBy(m => m.StartDate.Date)
-                .ThenBy(m => m.EventName)
-                .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
-                .ToListAsync();
+            var matches = await repository.GetMatchesByDate(date, filter);
 
-            var result = mapper.Map<List<Match>, IEnumerable<ListItemMatchResource>>(matches);
-
-            return Ok(result);
+            return Ok(matches);
         }
 
-        [HttpGet("{id}", Name = nameof(GetMatch))]
-        public async Task<IActionResult> GetMatch(int id)
+        [HttpGet("period/{startDate}/{endDate}", Name = nameof(GetMatchesByPeriod))]
+        public async Task<IActionResult> GetMatchesByPeriod(DateTime startDate, DateTime endDate, [FromQuery] MatchFilter filter)
         {
-            var match = await context.Matches
-                .Include(m => m.TimePoints)
-                .Include(m => m.Predictions)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var matches = await repository.GetMatchesByPeriod(startDate, endDate, filter);
+
+            return Ok(matches);
+        }
+
+        [HttpGet("upcoming", Name = nameof(GetUpcomingMatches))]
+        public async Task<IActionResult> GetUpcomingMatches([FromQuery] MatchFilter filter)
+        {
+            var startDate = DateTime.Now.Date;
+            var endDate = DateTime.Now.Date.AddDays(7);
+            
+            var groups = await repository.GetMatchesGroupedByDate(startDate, endDate, filter);
+
+            return Ok(groups);
+        }
+
+        [HttpGet("view/{id}/{snapshot?}", Name = nameof(GetMatch))]
+        public async Task<IActionResult> GetMatch(int id, TimeSpan? snapshot)
+        {
+            var match = await repository.GetMatch(id, snapshot);
 
             if (match == null)
             {
                 return NotFound();
             }
 
-            var result = mapper.Map<Match, DetailMatchResource>(match);
-
-            return Ok(result);
-        }
-
-        [HttpGet("today", Name = nameof(GetTodayMatches))]
-        public async Task<IActionResult> GetTodayMatches([FromQuery] TodayMatchFilter filter)
-        {
-            var matches = await context.Matches
-                .Include(m => m.LastPrediction)
-                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
-                .Where(m => m.StartDate.Date.Equals(DateTime.Now.Date))
-                .OrderBy(m => m.EventName)
-                .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
-                .ToListAsync();
-            
-            var result = mapper.Map<List<Match>, IEnumerable<ListItemMatchResource>>(matches);
-
-            return Ok(result);
-        }
-
-        [HttpGet("today/gemstone", Name = nameof(GetTodayMatchesWithGemstone))]
-        public async Task<IActionResult> GetTodayMatchesWithGemstone([FromQuery] TodayMatchFilter filter)
-        {
-            var matches = await context.Matches
-                .Include(m => m.LastPrediction)
-                .Where(m => m.LastPrediction.Gemstone != null)
-                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
-                .Where(m => m.StartDate.Date.Equals(DateTime.Now.Date))
-                .OrderBy(m => m.StartDate.Date)
-                .ThenBy(m => m.EventName)
-                .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
-                .ToListAsync();
-            
-            var result = mapper.Map<List<Match>, IEnumerable<ListItemMatchResource>>(matches);
-
-            return Ok(result);
-        }
-
-        [HttpGet("today/gemstone/{gemstonesString}", Name = nameof(GetTodayMatchesWithGemstoneByGemstones))]
-        public async Task<IActionResult> GetTodayMatchesWithGemstoneByGemstones(string gemstonesString, [FromQuery] TodayMatchFilter filter)
-        {
-            var gemstones = gemstonesString.Split(",").ToList();
-
-            var matches = await context.Matches
-                .Include(m => m.LastPrediction)
-                .Where(m => gemstones.Contains(m.LastPrediction.Gemstone))
-                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Equals(filter.EventName))
-                .Where(m => m.StartDate.Date.Equals(DateTime.Now.Date))
-                .OrderBy(m => m.StartDate.Date)
-                .ThenBy(m => m.EventName)
-                .Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize)
-                .ToListAsync();
-            
-            var result = mapper.Map<List<Match>, IEnumerable<ListItemMatchResource>>(matches);
-
-            return Ok(result);
+            return Ok(match);
         }
     }
 }
