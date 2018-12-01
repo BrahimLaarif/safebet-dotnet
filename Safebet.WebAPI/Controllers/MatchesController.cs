@@ -36,7 +36,7 @@ namespace Safebet.WebAPI.Controllers
         [HttpGet("today", Name = nameof(GetTodayMatches))]
         public async Task<IActionResult> GetTodayMatches([FromQuery] MatchFilter filter)
         {
-            var today = new DateTime(2018, 11, 2, 18, 0, 0);
+            var today = DateTime.Now;
 
             var matches = await repository.GetTodayMatches(today, filter);
 
