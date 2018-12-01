@@ -25,31 +25,12 @@ namespace Safebet.WebAPI.Controllers
             this.repository = repository;
         }
 
-        [HttpGet("date/{date}", Name = nameof(GetMatchesByDate))]
-        public async Task<IActionResult> GetMatchesByDate(DateTime date, [FromQuery] MatchFilter filter)
+        [HttpGet("date/{date}", Name = nameof(GetMatches))]
+        public async Task<IActionResult> GetMatches(DateTime date, [FromQuery] MatchFilter filter)
         {
-            var matches = await repository.GetMatchesByDate(date, filter);
+            var matches = await repository.GetMatches(date, filter);
 
             return Ok(matches);
-        }
-
-        [HttpGet("period/{startDate}/{endDate}", Name = nameof(GetMatchesByPeriod))]
-        public async Task<IActionResult> GetMatchesByPeriod(DateTime startDate, DateTime endDate, [FromQuery] MatchFilter filter)
-        {
-            var matches = await repository.GetMatchesByPeriod(startDate, endDate, filter);
-
-            return Ok(matches);
-        }
-
-        [HttpGet("upcoming", Name = nameof(GetUpcomingMatches))]
-        public async Task<IActionResult> GetUpcomingMatches([FromQuery] MatchFilter filter)
-        {
-            var startDate = DateTime.Now.Date;
-            var endDate = DateTime.Now.Date.AddDays(7);
-            
-            var groups = await repository.GetMatchesGroupedByDate(startDate, endDate, filter);
-
-            return Ok(groups);
         }
 
         [HttpGet("view/{id}", Name = nameof(GetMatch))]

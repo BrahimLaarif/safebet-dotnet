@@ -8,6 +8,7 @@ namespace Safebet.WebAPI.Models
     {
         public int Count { get; set; }
         public float Odds { get; set; }
+        public float BalanceBeforeBet { get; set; }
         public float Amount { get; set; }
         public float AmountToReturn { get; set; }
         public DateTime BetDate { get; set; }
@@ -15,6 +16,7 @@ namespace Safebet.WebAPI.Models
         public int ErrorsCount { get; set; }
         public string Result { get; set; }
         public DateTime CashoutDate { get; set; }
+        public float BalanceAfterCashout { get; set; }
         public ICollection<ItemMatch> Matches { get; set; }
 
         public Bet()

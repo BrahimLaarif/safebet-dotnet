@@ -17,35 +17,12 @@ namespace Safebet.WebAPI.Data.Repositories
             this.context = context;
         }
 
-        public async Task<IEnumerable<ItemMatch>> GetMatchesByDate(DateTime date, MatchFilter filter)
+        public async Task<IEnumerable<ItemMatch>> GetMatches(DateTime date, MatchFilter filter)
         {
             return await context.Matches
                 .Where(m => m.KickoffDate.Date.Equals(date))
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Contains(filter.EventName))
-                .OrderBy(m => m.KickoffDate)
-                .ThenBy(m => m.EventName)
-                .Select(m => new ItemMatch() {
-                    Id = m.Id,
-                    EventName = m.EventName,
-                    KickoffDate = m.KickoffDate,
-                    Name = m.Name,
-                    Result = m.Result,
-                    Prediction = m.Predictions
-                        .OrderByDescending(p => p.CreationDate)
-                        .FirstOrDefault()
-                })
-                .Where(m => string.IsNullOrEmpty(filter.Gemstones) || filter.Gemstones.Contains(m.Prediction.Gemstone))
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<ItemMatch>> GetMatchesByPeriod(DateTime startDate, DateTime endDate, MatchFilter filter)
-        {
-            return await context.Matches
-                .Where(m => m.KickoffDate.Date >= startDate)
-                .Where(m => m.KickoffDate.Date <= endDate)
-                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Contains(filter.EventName))
+                .Where(m => string.IsNullOrEmpty(filter.Events) || filter.Events.Contains(m.EventName))
                 .OrderBy(m => m.KickoffDate)
                 .ThenBy(m => m.EventName)
                 .Select(m => new ItemMatch() {
@@ -68,7 +45,7 @@ namespace Safebet.WebAPI.Data.Repositories
                 .Where(m => m.KickoffDate.Date >= startDate)
                 .Where(m => m.KickoffDate.Date <= endDate)
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
-                .Where(m => string.IsNullOrEmpty(filter.EventName) || m.EventName.Contains(filter.EventName))
+                .Where(m => string.IsNullOrEmpty(filter.Events) || filter.Events.Contains(m.EventName))
                 .OrderBy(m => m.KickoffDate)
                 .ThenBy(m => m.EventName)
                 .Select(m => new ItemMatch() {

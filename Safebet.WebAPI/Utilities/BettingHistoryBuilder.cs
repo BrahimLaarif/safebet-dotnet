@@ -45,6 +45,7 @@ namespace Safebet.WebAPI.Utilities
                     {
                         Count = 1,
                         Odds = odds,
+                        BalanceBeforeBet = bettingHistory.Balance,
                         Amount = amount,
                         AmountToReturn = amountToReturn,
                         BetDate = betDate,
@@ -55,7 +56,6 @@ namespace Safebet.WebAPI.Utilities
                     bettingHistory.Count += 1;
                     bettingHistory.Bets.Add(bet);
                     bettingHistory.Balance -= bet.Amount;
-                    bettingHistory.BalanceHistory.Add(bettingHistory.Balance);
                 }
             }
 
@@ -80,14 +80,17 @@ namespace Safebet.WebAPI.Utilities
 
                     if (errorsCount == 0)
                     {
-                        bet.Result = "Won";
+                        bet.Result = "won";
                         bettingHistory.Balance += bet.AmountToReturn;
+                        bet.BalanceAfterCashout = bettingHistory.Balance;
                         bettingHistory.BalanceHistory.Add(bettingHistory.Balance);
                     }
                     else
                     {
-                        bet.Result = "Lost";
+                        bet.Result = "lost";
+                        bet.BalanceAfterCashout = bettingHistory.Balance;
                         bettingHistory.ErrorsCount += 1;
+                        bettingHistory.BalanceHistory.Add(bettingHistory.Balance);
                     }
 
                     bet.ErrorsCount = errorsCount;
