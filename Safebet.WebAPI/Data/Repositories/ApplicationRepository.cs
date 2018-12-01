@@ -39,10 +39,10 @@ namespace Safebet.WebAPI.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<ItemMatch>> GetTodayMatches(DateTime today, MatchFilter filter)
+        public async Task<IEnumerable<ItemMatch>> GetUpcomingMatches(DateTime date, MatchFilter filter)
         {
             return await context.Matches
-                .Where(m => m.KickoffDate.Date.Equals(today.Date) && m.KickoffDate.Hour >= today.Hour && m.KickoffDate.Minute >= today.Minute && m.KickoffDate.Second >= today.Second)
+                .Where(m => m.KickoffDate.Date.Equals(date.Date) && m.KickoffDate.Hour >= date.Hour && m.KickoffDate.Minute >= date.Minute && m.KickoffDate.Second >= date.Second)
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
                 .Where(m => string.IsNullOrEmpty(filter.Events) || filter.Events.Contains(m.EventName))
                 .OrderBy(m => m.KickoffDate)
