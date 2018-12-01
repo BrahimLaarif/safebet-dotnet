@@ -39,6 +39,28 @@ namespace Safebet.WebAPI.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<ItemMatch>> GetTodayMatches(DateTime today, MatchFilter filter)
+        {
+            return await context.Matches
+                .Where(m => m.KickoffDate.Date.Equals(today.Date) && m.KickoffDate.Hour >= today.Hour && m.KickoffDate.Minute >= today.Minute && m.KickoffDate.Second >= today.Second)
+                .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
+                .Where(m => string.IsNullOrEmpty(filter.Events) || filter.Events.Contains(m.EventName))
+                .OrderBy(m => m.KickoffDate)
+                .ThenBy(m => m.EventName)
+                .Select(m => new ItemMatch() {
+                    Id = m.Id,
+                    EventName = m.EventName,
+                    KickoffDate = m.KickoffDate,
+                    Name = m.Name,
+                    Result = m.Result,
+                    Prediction = m.Predictions
+                        .OrderByDescending(p => p.CreationDate)
+                        .FirstOrDefault()
+                })
+                .Where(m => string.IsNullOrEmpty(filter.Gemstones) || filter.Gemstones.Contains(m.Prediction.Gemstone))
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<DateGroup>> GetMatchesGroupedByDate(DateTime startDate, DateTime endDate, MatchFilter filter)
         {
             var matches = await context.Matches
