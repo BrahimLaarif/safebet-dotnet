@@ -94,5 +94,5 @@ CREATE INDEX `IX_Predictions_MatchId` ON `Predictions` (`MatchId`);
 CREATE INDEX `IX_TimePoints_MatchId` ON `TimePoints` (`MatchId`);
 
 INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
-VALUES ('20181128225841_InitialModel', '2.1.1-rtm-30846');
+VALUES ('20181201042134_InitialModel', '2.1.1-rtm-30846');
 
