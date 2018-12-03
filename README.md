@@ -31,10 +31,11 @@ dotnet ef migrations script --output dump.sql
 ## Endpoints
 - GET /api/matches/date/2018-11-03
 - GET /api/matches/date/2018-11-03?gemstones=grandidierite,diamond,ruby
-- GET /api/matches/today
+- GET /api/matches/date/2018-11-03/snapshot/14:50:00
+- GET /api/matches/date/2018-11-03/snapshot/14:50:00?gemstones=grandidierite,diamond,ruby
+- GET /api/matches/period/2018-11-03/2018-11-04
+- GET /api/matches/period/2018-11-03/2018-11-04?gemstones=grandidierite,diamond,ruby
 - GET /api/matches/view/1
 - GET /api/matches/view/1/snapshot/14:50:00
-- GET /api/gemstones/today
-- GET /api/gemstones/upcoming
-- GET /api/bettingHistory/2017-01-01/2018-12-31
-- GET /api/bettingHistory/2017-01-01/2018-12-31?gemstones=grandidierite,diamond,ruby
+- GET /api/bettingHistory/period/2017-01-01/2018-12-31
+- GET /api/bettingHistory/period/2017-01-01/2018-12-31?gemstones=grandidierite,diamond,ruby

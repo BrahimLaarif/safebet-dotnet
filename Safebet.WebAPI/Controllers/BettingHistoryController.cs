@@ -25,7 +25,7 @@ namespace Safebet.WebAPI.Controllers
             this.repository = repository;
         }
 
-        [HttpGet("{startDate}/{endDate}")]
+        [HttpGet("period/{startDate}/{endDate}")]
         public async Task<IActionResult> GetBettingHistory(DateTime startDate, DateTime endDate, [FromQuery] MatchFilter filter)
         {
             var groups = await repository.GetMatchesGroupedByDate(startDate, endDate, filter);

@@ -33,14 +33,20 @@ namespace Safebet.WebAPI.Controllers
             return Ok(matches);
         }
 
-        [HttpGet("today", Name = nameof(GetTodayMatches))]
-        public async Task<IActionResult> GetTodayMatches([FromQuery] MatchFilter filter)
+        [HttpGet("date/{date}/snapshot/{snapshot}", Name = nameof(GetMatchesSnapshot))]
+        public async Task<IActionResult> GetMatchesSnapshot(DateTime date, TimeSpan snapshot, [FromQuery] MatchFilter filter)
         {
-            var date = DateTime.Now;
-
-            var matches = await repository.GetUpcomingMatches(date, filter);
+            var matches = await repository.GetMatchesSnapshot(date, snapshot, filter);
 
             return Ok(matches);
+        }
+
+        [HttpGet("period/{startDate}/{endDate}", Name = nameof(GetMatchesGroupedByDate))]
+        public async Task<IActionResult> GetMatchesGroupedByDate(DateTime startDate, DateTime endDate, [FromQuery] MatchFilter filter)
+        {
+            var groups = await repository.GetMatchesGroupedByDate(startDate, endDate, filter);
+
+            return Ok(groups);
         }
 
         [HttpGet("view/{id}", Name = nameof(GetMatch))]
@@ -59,7 +65,7 @@ namespace Safebet.WebAPI.Controllers
         [HttpGet("view/{id}/snapshot/{snapshot}", Name = nameof(GetMatchSnapshot))]
         public async Task<IActionResult> GetMatchSnapshot(int id, TimeSpan snapshot)
         {
-            var match = await repository.GetMatch(id, snapshot);
+            var match = await repository.GetMatchSnapshot(id, snapshot);
 
             if (match == null)
             {

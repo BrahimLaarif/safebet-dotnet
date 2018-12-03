@@ -18,7 +18,7 @@ namespace Safebet.WebAPI.Models
 
         public TimePoint()
         {
-            CreationDate = DateTime.Now;
+            CreationDate = DateTime.Now.ToUniversalTime();
         }
     }
 }

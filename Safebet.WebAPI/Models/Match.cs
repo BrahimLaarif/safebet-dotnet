@@ -32,7 +32,7 @@ namespace Safebet.WebAPI.Models
 
         public Match()
         {
-            CreationDate = DateTime.Now;
+            CreationDate = DateTime.Now.ToUniversalTime();
             TimePoints = new Collection<TimePoint>();
             Predictions = new Collection<Prediction>();
         }

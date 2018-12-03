@@ -77,7 +77,7 @@ namespace Safebet.WebAPI.Models
 
         public Prediction()
         {
-            CreationDate = DateTime.Now;
+            CreationDate = DateTime.Now.ToUniversalTime();
         }
     }
 }

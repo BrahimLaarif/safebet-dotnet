@@ -39,10 +39,11 @@ namespace Safebet.WebAPI.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<ItemMatch>> GetUpcomingMatches(DateTime date, MatchFilter filter)
+        public async Task<IEnumerable<ItemMatch>> GetMatchesSnapshot(DateTime date, TimeSpan snapshot, MatchFilter filter)
         {
             return await context.Matches
-                .Where(m => m.KickoffDate.Date.Equals(date.Date) && m.KickoffDate.Hour >= date.Hour && m.KickoffDate.Minute >= date.Minute && m.KickoffDate.Second >= date.Second)
+                .Where(m => m.KickoffDate.Date.Equals(date))
+                .Where(m => m.KickoffDate >= m.KickoffDate.Date.AddHours(snapshot.Hours).AddMinutes(snapshot.Minutes).AddSeconds(snapshot.Seconds))
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
                 .Where(m => string.IsNullOrEmpty(filter.Events) || filter.Events.Contains(m.EventName))
                 .OrderBy(m => m.KickoffDate)
@@ -54,6 +55,7 @@ namespace Safebet.WebAPI.Data.Repositories
                     Name = m.Name,
                     Result = m.Result,
                     Prediction = m.Predictions
+                        .Where(p => p.CreationDate <= m.KickoffDate.Date.AddHours(snapshot.Hours).AddMinutes(snapshot.Minutes).AddSeconds(snapshot.Seconds))
                         .OrderByDescending(p => p.CreationDate)
                         .FirstOrDefault()
                 })
@@ -84,7 +86,6 @@ namespace Safebet.WebAPI.Data.Repositories
                 .ToListAsync();
             
             return matches
-                .Where(m => m.Prediction != null)
                 .GroupBy(m => m.KickoffDate.Date)
                 .Select(g => new DateGroup() {
                     Date = g.Key,
@@ -94,7 +95,7 @@ namespace Safebet.WebAPI.Data.Repositories
                 .ToList();
         }
 
-        public async Task<DetailMatch> GetMatch(int id, TimeSpan? snapshot = null)
+        public async Task<DetailMatch> GetMatch(int id)
         {
             return await context.Matches
                 .Select(m => new DetailMatch() {
@@ -104,13 +105,34 @@ namespace Safebet.WebAPI.Data.Repositories
                     Name = m.Name,
                     Result = m.Result,
                     TimePoints = m.TimePoints
-                        .Where(t => !snapshot.HasValue || t.CreationDate <= m.KickoffDate.Date.AddHours(snapshot.Value.Hours).AddMinutes(snapshot.Value.Minutes).AddSeconds(snapshot.Value.Seconds))
                         .ToList(),
                     Predictions = m.Predictions
-                        .Where(p => !snapshot.HasValue || p.CreationDate <= m.KickoffDate.Date.AddHours(snapshot.Value.Hours).AddMinutes(snapshot.Value.Minutes).AddSeconds(snapshot.Value.Seconds))
                         .ToList(),
                     Prediction = m.Predictions
-                        .Where(p => !snapshot.HasValue || p.CreationDate <= m.KickoffDate.Date.AddHours(snapshot.Value.Hours).AddMinutes(snapshot.Value.Minutes).AddSeconds(snapshot.Value.Seconds))
+                        .OrderByDescending(p => p.CreationDate)
+                        .FirstOrDefault()
+                })
+                .SingleOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task<DetailMatch> GetMatchSnapshot(int id, TimeSpan snapshot)
+        {
+            return await context.Matches
+                .Where(m => m.KickoffDate >= m.KickoffDate.Date.AddHours(snapshot.Hours).AddMinutes(snapshot.Minutes).AddSeconds(snapshot.Seconds))
+                .Select(m => new DetailMatch() {
+                    Id = m.Id,
+                    EventName = m.EventName,
+                    KickoffDate = m.KickoffDate,
+                    Name = m.Name,
+                    Result = m.Result,
+                    TimePoints = m.TimePoints
+                        .Where(t => t.CreationDate <= m.KickoffDate.Date.AddHours(snapshot.Hours).AddMinutes(snapshot.Minutes).AddSeconds(snapshot.Seconds))
+                        .ToList(),
+                    Predictions = m.Predictions
+                        .Where(p => p.CreationDate <= m.KickoffDate.Date.AddHours(snapshot.Hours).AddMinutes(snapshot.Minutes).AddSeconds(snapshot.Seconds))
+                        .ToList(),
+                    Prediction = m.Predictions
+                        .Where(p => p.CreationDate <= m.KickoffDate.Date.AddHours(snapshot.Hours).AddMinutes(snapshot.Minutes).AddSeconds(snapshot.Seconds))
                         .OrderByDescending(p => p.CreationDate)
                         .FirstOrDefault()
                 })
