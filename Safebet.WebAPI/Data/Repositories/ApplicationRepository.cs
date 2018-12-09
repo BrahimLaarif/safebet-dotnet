@@ -24,7 +24,7 @@ namespace Safebet.WebAPI.Data.Repositories
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
                 .Where(m => string.IsNullOrEmpty(filter.Events) || filter.Events.Contains(m.EventName))
                 .OrderBy(m => m.KickoffDate)
-                .ThenBy(m => m.EventName)
+                // .ThenBy(m => m.EventName)
                 .Select(m => new ItemMatch() {
                     Id = m.Id,
                     EventName = m.EventName,
@@ -47,7 +47,7 @@ namespace Safebet.WebAPI.Data.Repositories
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
                 .Where(m => string.IsNullOrEmpty(filter.Events) || filter.Events.Contains(m.EventName))
                 .OrderBy(m => m.KickoffDate)
-                .ThenBy(m => m.EventName)
+                // .ThenBy(m => m.EventName)
                 .Select(m => new ItemMatch() {
                     Id = m.Id,
                     EventName = m.EventName,
@@ -71,7 +71,7 @@ namespace Safebet.WebAPI.Data.Repositories
                 .Where(m => string.IsNullOrEmpty(filter.Name) || m.Name.Contains(filter.Name))
                 .Where(m => string.IsNullOrEmpty(filter.Events) || filter.Events.Contains(m.EventName))
                 .OrderBy(m => m.KickoffDate)
-                .ThenBy(m => m.EventName)
+                // .ThenBy(m => m.EventName)
                 .Select(m => new ItemMatch() {
                     Id = m.Id,
                     EventName = m.EventName,
