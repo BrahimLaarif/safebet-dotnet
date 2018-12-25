@@ -33,13 +33,13 @@ namespace Safebet.WebAPI.Utilities
             {
                 if (match.Result != null && match.Prediction != null)
                 {
+                    var betDate = match.KickoffDate;
+                    ProcessPendingBets(betDate);
+
                     var odds = match.Prediction.PredictedResultOdds;
                     var amount = bettingHistory.Balance / 3;
                     var amountToReturn = amount * odds;
-                    var betDate = match.KickoffDate;
                     var cashoutDate = match.KickoffDate.AddMinutes(115);
-
-                    ProcessPendingBets(betDate);
 
                     var bet = new Bet()
                     {
