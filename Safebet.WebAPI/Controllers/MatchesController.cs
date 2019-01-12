@@ -25,10 +25,10 @@ namespace Safebet.WebAPI.Controllers
             this.repository = repository;
         }
 
-        [HttpGet("date/{date}/best/riskfree", Name = nameof(GetBestRiskFreeMatches))]
-        public async Task<IActionResult> GetBestRiskFreeMatches(DateTime date)
+        [HttpGet("date/{date}/best/riskfree", Name = nameof(GetBestRiskfreeMatches))]
+        public async Task<IActionResult> GetBestRiskfreeMatches(DateTime date)
         {
-            var matches = await repository.GetBestRiskFreeMatches(date);
+            var matches = await repository.GetBestRiskfreeMatches(date);
 
             return Ok(matches);
         }

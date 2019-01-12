@@ -17,7 +17,7 @@ namespace Safebet.WebAPI.Data.Repositories
             this.context = context;
         }
 
-        public async Task<IEnumerable<ItemMatch>> GetBestRiskFreeMatches(DateTime date)
+        public async Task<IEnumerable<ItemMatch>> GetBestRiskfreeMatches(DateTime date)
         {
             return await context.Matches
                 .Where(m => m.KickoffDate.Date.Equals(date))
