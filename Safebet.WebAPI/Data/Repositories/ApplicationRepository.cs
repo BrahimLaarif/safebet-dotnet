@@ -17,6 +17,25 @@ namespace Safebet.WebAPI.Data.Repositories
             this.context = context;
         }
 
+        public async Task<IEnumerable<ItemMatch>> GetBestRiskFreeMatches(DateTime date)
+        {
+            return await context.Matches
+                .Where(m => m.KickoffDate.Date.Equals(date))
+                .Select(m => new ItemMatch() {
+                    Id = m.Id,
+                    EventName = m.EventName,
+                    KickoffDate = m.KickoffDate,
+                    Name = m.Name,
+                    Result = m.Result,
+                    Prediction = m.Predictions
+                        .OrderByDescending(p => p.CreationDate)
+                        .FirstOrDefault()
+                })
+                .Where(m => m.Prediction.PredictedSafeProba >= 0.66)
+                .OrderByDescending(m => m.Prediction.PredictedSafeProba)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<ItemMatch>> GetMatches(DateTime date, MatchFilter filter)
         {
             return await context.Matches

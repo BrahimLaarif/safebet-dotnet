@@ -7,6 +7,7 @@ namespace Safebet.WebAPI.Data.Repositories
 {
     public interface IApplicationRepository
     {
+        Task<IEnumerable<ItemMatch>> GetBestRiskFreeMatches(DateTime date);
         Task<IEnumerable<ItemMatch>> GetMatches(DateTime date, MatchFilter filter);
         Task<IEnumerable<ItemMatch>> GetMatchesSnapshot(DateTime date, TimeSpan snapshot, MatchFilter filter);
         Task<IEnumerable<DateGroup>> GetMatchesGroupedByDate(DateTime startDate, DateTime endDate, MatchFilter filter);

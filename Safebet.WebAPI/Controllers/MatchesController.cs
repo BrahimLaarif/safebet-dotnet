@@ -25,6 +25,14 @@ namespace Safebet.WebAPI.Controllers
             this.repository = repository;
         }
 
+        [HttpGet("date/{date}/best/riskfree", Name = nameof(GetBestRiskFreeMatches))]
+        public async Task<IActionResult> GetBestRiskFreeMatches(DateTime date)
+        {
+            var matches = await repository.GetBestRiskFreeMatches(date);
+
+            return Ok(matches);
+        }
+
         [HttpGet("date/{date}", Name = nameof(GetMatches))]
         public async Task<IActionResult> GetMatches(DateTime date, [FromQuery] MatchFilter filter)
         {
